@@ -1,0 +1,52 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Icon files
+Icon?
+._*
+
+# macOS metadata
+*.swp
+*.lock
+*.pf2
+*.com.apple*
+.Spotlight-V100
+.Trashes
+
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Vite files
+*.log
+*.tsbuildinfo
+*.env
+*.env.*
+
+# Svelte Kit-specific
+.svelte-kit/
+
+# Editor and IDE specific files
+.idea/
+.vscode/
+*.sublime-*
+*.sw?
+
+# npm cache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
+
+# MacOS symlink files
+**/.AppleDouble
+**/.DS_Store
