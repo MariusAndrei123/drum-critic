@@ -1,66 +1,154 @@
 <script>
 	let climbStairsCode = `
-#include <iostream>
-using namespace std;
-
-int climbStairs(int n) {
-    if (n == 1) return 1;
-    if (n == 2) return 2;
-
-    int dp[101] = {0};
-    dp[1] = 1;
-    dp[2] = 2;
-
-    for (int i = 3; i <= n; i++) {
-        dp[i] = dp[i - 1] + dp[i - 2];
-    }
-    return dp[n];
-}
-
-int main() {
-    int n;
-    cin >> n;
-    cout << climbStairs(n) << endl;
-    return 0;
-}`;
-</script>
-
-<h2 class="problem-title">4. Problema Scărilor (Climbing Stairs)</h2>
-<div class="code-container">
-	<pre><code>{climbStairsCode}</code></pre>
-</div>
-
-<style>
-	.problem-title {
-		font-size: 2.5em;
-		color: #ffffff;
-		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-		margin-bottom: 1em;
-		padding: 0.2em 0.5em;
-		background-color: rgba(0, 0, 0, 0.5);
-		border-radius: 8px;
-		display: inline-block;
+  #include <iostream>
+  using namespace std;
+  
+  int climbStairs(int n) {
+	  if (n == 1) return 1;
+	  if (n == 2) return 2;
+  
+	  int dp[101] = {0};
+	  dp[1] = 1;
+	  dp[2] = 2;
+  
+	  for (int i = 3; i <= n; i++) {
+		  dp[i] = dp[i - 1] + dp[i - 2];
+	  }
+	  return dp[n];
+  }
+  
+  int main() {
+	  int n;
+	  cin >> n;
+	  cout << climbStairs(n) << endl;
+	  return 0;
+  }`;
+  
+	function calculateWays() {
+	  const n = parseInt(document.getElementById('stairsInput').value);
+	  if (isNaN(n) || n <= 0) {
+		document.getElementById('result').innerHTML = `
+		  <p style="color: red;">Vă rugăm să introduceți un număr pozitiv!</p>
+		`;
+		return;
+	  }
+  
+	  let dp = Array(n + 1).fill(0);
+	  dp[1] = 1;
+	  if (n >= 2) dp[2] = 2;
+  
+	  for (let i = 3; i <= n; i++) {
+		dp[i] = dp[i - 1] + dp[i - 2];
+	  }
+  
+	  document.getElementById('result').innerHTML = `
+		<p>Numărul total de moduri de a urca ${n} trepte este: ${dp[n]}</p>
+	  `;
 	}
-
+  </script>
+  
+  <main class="interactive-exercise">
+	<h1>4. Problema Scărilor (Climbing Stairs)</h1>
+  
+	<p>
+	  Problema **Climbing Stairs** este una clasică în programare. Aceasta constă în determinarea numărului de moduri
+	  în care poți urca o scară de **n** trepte, având posibilitatea de a urca fie 1 treaptă, fie 2 trepte odată.
+	</p>
+  
+	<p><strong>Explicație:</strong></p>
+	<ul>
+	  <li>De exemplu, dacă scară are **n = 3** trepte, poți urca astfel:
+		<ul>
+		  <li>1 + 1 + 1</li>
+		  <li>1 + 2</li>
+		  <li>2 + 1</li>
+		</ul>
+		Numărul total de moduri este **3**.
+	  </li>
+	  <li>Se rezolvă prin programare dinamică, deoarece fiecare stare depinde de ultimele două stări anterioare.</li>
+	</ul>
+  
+	<div class="input-section">
+	  <label for="stairsInput">Numărul de trepte:</label>
+	  <input id="stairsInput" type="number" placeholder="Ex: 5" />
+  
+	  <button on:click={calculateWays}>Calculează modurile</button>
+	</div>
+  
+	<div class="result" id="result"></div>
+  
+	<h2>Cod C++ pentru Climbing Stairs:</h2>
+	<div class="code-container">
+	  <pre><code>{climbStairsCode}</code></pre>
+	</div>
+  </main>
+  
+  <style>
+	.interactive-exercise {
+	  background-color: #181818;
+	  color: #4CAF50;
+	  padding: 20px;
+	  border-radius: 8px;
+	}
+  
+	.input-section {
+	  margin-bottom: 20px;
+	}
+  
+	label {
+	  font-weight: bold;
+	  display: block;
+	}
+  
+	input {
+	  margin-bottom: 10px;
+	  padding: 5px;
+	  border-radius: 4px;
+	  border: 1px solid #4CAF50;
+	  background-color: #282828;
+	  color: #fff;
+	}
+  
+	button {
+	  background-color: #4CAF50;
+	  color: white;
+	  border: none;
+	  padding: 10px;
+	  border-radius: 4px;
+	  cursor: pointer;
+	  transition: background-color 0.3s;
+	}
+  
+	button:hover {
+	  background-color: #45a049;
+	}
+  
+	.result {
+	  margin-top: 20px;
+	  padding: 10px;
+	  background-color: #333;
+	  border-radius: 8px;
+	}
+  
 	.code-container {
-		position: relative;
-		background-color: rgba(255, 255, 255, 0.8);
-		padding: 1.5em;
-		border-radius: 8px;
-		margin-top: 1em;
-		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+	  background-color: #1a1a1a;
+	  color: #4CAF50;
+	  padding: 10px;
+	  border-radius: 8px;
+	  overflow-x: auto;
+	  margin-top: 20px;
 	}
-
-	.code-container::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(255, 255, 255, 0.7);
-		filter: blur(8px);
-		z-index: -1;
+  
+	pre {
+	  font-family: 'Courier New', Courier, monospace;
+	  font-size: 1em;
+	  white-space: pre-wrap;
+	  word-wrap: break-word;
+	  margin: 0;
 	}
-</style>
-Z
+  
+	code {
+	  color: #4CAF50;
+	}
+  </style>
+  
