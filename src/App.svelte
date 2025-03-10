@@ -60,7 +60,7 @@
 		});
 	  }
   
-	  
+
 	  if (topOrder.length !== tasks.length) {
 		alert("Graf invalid! Verifică dependențele (cicluri sau date greșite).");
 		return;
@@ -107,7 +107,7 @@
 	</section>
   
 	<section>
-	  <h2>Exemplu Vizual</h2>
+	  <h2>Exemplu Auditiv</h2>
 	  <p>Diagrama de mai jos ilustrează un proiect cu mai multe activități și dependențele lor:</p>
 	  <img src={drumCriticImage} alt="Imagine drum critic" style="max-width: 60%; height: auto;" />
 	  <br><br/>
