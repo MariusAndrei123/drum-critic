@@ -60,6 +60,7 @@
 		});
 	  }
   
+	  
 	  if (topOrder.length !== tasks.length) {
 		alert("Graf invalid! Verifică dependențele (cicluri sau date greșite).");
 		return;
