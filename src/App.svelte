@@ -150,50 +150,139 @@
 		<div class="code-container">
 		  <pre class="code-block">
 			{@html `
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;iostream&gt; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;using namespace std; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;const int NMAX = 20; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;const int INF = 1000000000; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;double la[NMAX][NMAX];  // Duratele arcelor (matrice de adiacență) 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;double t[NMAX], tb[NMAX]; // Timpul de început și finalizare 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;int n; 
-			  
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;void citire() { 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;for (int i = 0; i &lt; NMAX; i++) { 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (int j = 0; j &lt; NMAX; j++) { 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;la[i][j] = -1; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;} 
-			  <br><br>
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Introduceti arcele si duratele. Terminati cu 0 0 0:\\n"; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;while (true) { 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int x, y; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double c; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Arc: "; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cin &gt;&gt; x &gt;&gt; y; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (x == 0 && y == 0) break; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Durata: "; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cin &gt;&gt; c; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;la[x][y] = c; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n = max(n, max(x, y)); 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;} 
-			  <br>
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;int main() { 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (int i = 0; i &lt; NMAX; i++) { 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t[i] = -1; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb[i] = -1; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;citire(); 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "EVENIMENTELE CRITICE SUNT: \\n"; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (int i = 1; i &lt;= n; i++) { 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t[i] == tb[i]) { 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Evenimentul " &lt;&lt; i &lt;&lt; endl; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} 
-			  <br><br>
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0; 
-			  <br>&nbsp;&nbsp;&nbsp;&nbsp;} 
-			  <br>
+		#include &lt;iostream&gt;
+
+		using namespace std;
+
+		const int NMAX = 20;
+		const int INF = 1000000000;
+
+		double la[NMAX][NMAX];  // Duratele arcelor (matrice de adiacență)
+		double t[NMAX], tb[NMAX]; // Timpul de început și finalizare
+		int n;
+
+		void citire() {
+			for (int i = 0; i < NMAX; i++)
+				for (int j = 0; j < NMAX; j++)
+					la[i][j] = -1;
+
+		cout << "Introduceti arcele si duratele. Terminati cu 0 0 0:";
+		while (true) {
+			int x, y;
+			double c;
+			cout << "Arc: ";
+			cin >> x >> y;
+			if (x == 0 && y == 0) break;
+			cout << "Durata: ";
+			cin >> c;
+			la[x][y] = c;
+			n = max(n, max(x, y));
+			}
+		}
+
+		void calct(int i) {
+			if (t[i] >= 0) return;
+			if (i == 1) {
+				t[i] = 0;
+				return;
+			}
+			double max_val = 0;
+			for (int j = 1; j <= n; j++) {
+				if (la[j][i] >= 0) {
+					if (t[j] < 0) calct(j);
+					if (max_val < la[j][i] + t[j])
+						max_val = la[j][i] + t[j];
+				}
+			}
+			t[i] = max_val;
+		}
+
+		void calctb(int i) {
+			if (tb[i] >= 0) return;
+			if (i == n) {
+				tb[i] = t[i];
+				return;
+			}
+			double min_val = INF;
+			for (int j = 1; j <= n; j++) {
+				if (la[i][j] >= 0) {
+					if (tb[j] < 0) calctb(j);
+					if (min_val > tb[j] - la[i][j])
+						min_val = tb[j] - la[i][j];
+				}
+			}
+			tb[i] = min_val;
+		}
+
+		void findCriticalPaths(int current, int path[], int pathIndex, int allPaths[][NMAX], int& pathCount) {
+			// Verificăm dacă suntem într-un eveniment critic
+			if (t[current] == tb[current]) {
+				path[pathIndex] = current;  // Adăugăm nodul la drum
+
+				// Dacă am ajuns la ultimul eveniment (n), salvăm drumul
+				if (current == n) {
+					for (int i = 0; i <= pathIndex; i++) {
+						allPaths[pathCount][i] = path[i];
+					}
+					pathCount++;
+				}
+
+				// Explorăm toți succesori care sunt parte din drumurile critice
+				for (int next = 1; next <= n; next++) {
+					if (la[current][next] >= 0 && t[current] == tb[current] && t[next] == tb[next] && t[next] == t[current] + la[current][next]) {
+						findCriticalPaths(next, path, pathIndex + 1, allPaths, pathCount);
+					}
+				}
+			}
+		}
+
+		int main() {
+			for (int i = 0; i < NMAX; i++) {
+				t[i] = -1;
+				tb[i] = -1;
+			}
+
+			citire();
+			calct(n);
+			calctb(1);
+
+			cout << "EVENIMENTELE CRITICE SUNT: ";
+			for (int i = 1; i <= n; i++) {
+				if (t[i] == tb[i]) {
+					cout << "Evenimentul " << i << endl;
+				}
+			}
+
+			cout << "ACTIVITATILE CRITICE SUNT: ";
+			for (int i = 1; i <= n; i++) {
+				for (int j = 1; j <= n; j++) {
+					if (la[i][j] >= 0 && t[i] == tb[i] && t[j] == tb[j] && t[j] == t[i] + la[i][j]) {
+						cout << "Activitatea reprezentata de arcul: (" << i << ", " << j << ")";
+					}
+				}
+			}
+
+			cout << "DRUMURILE CRITICE SUNT:";
+
+			int allPaths[NMAX][NMAX];  // Matrice pentru a salva toate drumurile critice
+			int path[NMAX];             // Drum curent
+			int pathCount = 0;          // Contor pentru numărul de drumuri critice
+
+			findCriticalPaths(1, path, 0, allPaths, pathCount);
+
+			// Afișăm toate drumurile critice
+			for (int i = 0; i < pathCount; i++) {
+				for (int j = 0; j < NMAX && allPaths[i][j] != 0; j++) {
+					cout << allPaths[i][j];
+					if (allPaths[i][j + 1] != 0) {
+						cout << " -> ";
+					}
+				}
+				cout << endl;
+			}
+
+			return 0;
+		}
 			`}
 		  </pre>
 		</div>
